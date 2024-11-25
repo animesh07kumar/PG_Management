@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Stuff {
+  Admin_id      Int       @id @default(autoincrement())
+  username      String    @unique
+  full_name     String
+  password_hash String
+  designation   String
+}
+
+model Room {
+  room_number       Int     @id
+  occupancy_cap     Int
+  tenant            Tenant? @relation(fields: [tenant_id], references: [tenant_id])
+  tenant_id         Int?    @unique // Each room can have at most one tenant
+  january_rent_status    Int
+  february_rent_status   Int
+  march_rent_status      Int
+  april_rent_status      Int
+  may_rent_status        Int
+  june_rent_status       Int
+  july_rent_status       Int
+  august_rent_status     Int
+  september_rent_status  Int
+  october_rent_status    Int
+  november_rent_status   Int
+  december_rent_status   Int
+}
+
+model Tenant {
+  tenant_id      Int        @id @default(autoincrement())
+  username       String     @unique
+  full_name      String
+  password_hash  String
+  aadhar_number  String     @unique
+  room_rent      Int
+  room           Room?
+  complaints     Complaint[]
+}
+
+model Complaint {
+  complaint_id Int    @id @default(autoincrement())
+  tenant_id    Int
+  tenant       Tenant @relation(fields: [tenant_id], references: [tenant_id])
+  description  String
+  status       String
+}
+
+// enum Role {
+//   USER
+//   ADMIN
+// }
